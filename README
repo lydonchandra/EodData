@@ -1,0 +1,30 @@
+1. Fill in your username and password in credentials.properties
+2. mvn assembly:assembly
+3. java -jar EodQuote-xxx.jar
+
+
+from http://ec2-75-101-178-4.compute-1.amazonaws.com/blog/2010/07/24.html
+
+Finally I can connect and login to EodData.com wsdl service at http://ws.eoddata.com/data.asmx?wsdl to retrieve intraday historical data.
+
+The xml at http://ws.eoddata.com/data.asmx?wsdl contains LoginResponse element and LOGINRESPONSE complexType,
+
+so if you use wsdl2java (apache-cxf-2.2.9) to generate the java classes, it will only generate one class LoginResponse, and ignore LOGINRESPONSE ( as it is not valid to have 2 classes with the same name in java)
+
+To get around this,
+
+- save the wsdl locally
+
+- rename LOGINRESPONSE into LOGINRESPONSE2 in the wsdl file
+
+- ./wsdl2java  -client -d client  /Users/lydonchandra/java/EodQuote/EodQuote/src/main/resources/eod.xml
+
+This should generate the package com.eoddata.ws.data into client dir, and you just need to copy it into your project.
+
+Then from your java
+
+Data data = new Data();
+
+Object obj = data.getDataSoap().login("username-without-email-address", "password");
+
+If you are a platinum member, you should be able to login!.
