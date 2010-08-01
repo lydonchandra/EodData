@@ -1,6 +1,7 @@
 package com.don.trading.EodQuote;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -8,8 +9,7 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import com.eoddata.ws.data.Data;
-import com.eoddata.ws.data.DataSoap;
-import com.eoddata.ws.data.RESPONSE;
+import com.eoddata.ws.data.QUOTE;
 
 public class QuoteTest extends TestCase {
 	
@@ -37,15 +37,18 @@ public class QuoteTest extends TestCase {
 	@Test
 	public void testGetQuotes() throws IOException {
 		
-		Data data = new Data();
-		
-		DataSoap dataSoap = data.getDataSoap();
-		String exchange = "NASDAQ";
+//		Data data = new Data();
+//		DataSoap dataSoap = data.getDataSoap();
+
+		String exchange = "ASX";
 		String quoteDate = "20100726";
-		String period = "h";
-		RESPONSE quoteResponse = dataSoap.quoteListByDatePeriod( getToken(), exchange, quoteDate, period);
+		String period = "d";
+		Quote quote = new Quote();
 		
-		quoteResponse = quoteResponse;
+		List<QUOTE> quotes = quote.getQuotes(exchange, quoteDate, period);
+		quotes = quotes;
+//		RESPONSE quoteResponse = dataSoap.quoteListByDatePeriod( getToken(), exchange, quoteDate, period);
+//		quoteResponse = quoteResponse;
 		
 	}
 }

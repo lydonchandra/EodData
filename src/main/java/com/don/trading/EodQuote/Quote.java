@@ -20,8 +20,13 @@ import com.eoddata.ws.data.RESPONSE;
 
 public class Quote {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Quote.class);
-	
-	public List<QUOTE> getQuotes(String exchange, String symbol, String quoteDate) throws IOException {
+
+	//	QuoteListByDatePeriod
+	//
+	//	Returns a complete list of end of day quotes for an entire exchange, specific date, and specific period.
+	//	INPUT: Token (Login Token), Exchange (eg: NASDAQ), QuoteDate (format:yyyyMMdd eg:20080225), Period (1, 5, 10, 15, 30, h, d, w, m)
+	//	OUTPUT: List of quotes
+	public List<QUOTE> getQuotes(String exchange, String quoteDate, String period) throws IOException {
 		Properties prop = EodConfig.getProperties("credentials.properties");
 		String username = prop.getProperty("username");
 		String password = prop.getProperty("password");
@@ -39,10 +44,14 @@ public class Quote {
 //				LOGGER.debug("{}, {}, {}, {}, {}, {}, {}", new Object[] {  quote.getName(), quote.getSymbol(), quote.getOpen(), quote.getHigh(), quote.getLow(), quote.getClose(), quote.getVolume() } );
 //			}
 			
-			RESPONSE quoteResponse = dataSoap.quoteListByDatePeriod(token, exchange, quoteDate, "");
-//			response = response;
+			RESPONSE quoteResponse = dataSoap.quoteListByDatePeriod(token, exchange, quoteDate, period);
 
-			
+			if( quoteResponse != null && 
+				quoteResponse.getQUOTES() != null ) {
+					
+					return quoteResponse.getQUOTES().getQUOTE();
+			}
+				
 		}
 		
 		return null;
